@@ -36,7 +36,7 @@
 </head>
 <body id="page-body" class="bg-stone-50 text-stone-800 min-h-screen flex flex-col">
 
-    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-rose-100">
+    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-stone-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="switchView('store')">
                 <div id="brand-logo-box" class="w-12 h-12 bg-gradient-to-tr from-rose-500 to-pink-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-rose-200">
@@ -336,7 +336,7 @@
                     </div>
 
                     <div class="flex gap-2 pt-2">
-                        <button type="submit" class="flex-1 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center space-x-2 space-x-reverse">
+                        <button type="submit" id="checkout-btn" class="flex-1 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center space-x-2 space-x-reverse">
                             <i class="fa-solid fa-check ml-2"></i>تأكيد الطلب الآن
                         </button>
                     </div>
@@ -411,7 +411,7 @@
                 </div>
                 <div class="flex justify-end space-x-2 space-x-reverse pt-2">
                     <button type="button" onclick="closeProductModal()" class="px-5 py-2.5 bg-stone-100 text-stone-600 rounded-xl text-sm font-bold">إلغاء</button>
-                    <button type="submit" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-bold shadow-sm">حفظ المنتج</button>
+                    <button type="submit" id="product-save-btn" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-bold shadow-sm">حفظ المنتج</button>
                 </div>
             </form>
         </div>
@@ -486,20 +486,61 @@
         function applyTheme(themeName) {
             const heroBanner = document.getElementById('hero-banner');
             const logoBox = document.getElementById('brand-logo-box');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const productSaveBtn = document.getElementById('product-save-btn');
             
+            // Global Theme Color Classes mappings
+            window.currentTheme = themeName;
+
             if (themeName === 'purple') {
                 heroBanner.className = "relative bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
                 logoBox.className = "w-12 h-12 bg-gradient-to-tr from-purple-600 to-indigo-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-purple-200";
+                if(checkoutBtn) checkoutBtn.className = "flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center space-x-2 space-x-reverse";
+                if(productSaveBtn) productSaveBtn.className = "px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-bold shadow-sm";
             } else if (themeName === 'emerald') {
                 heroBanner.className = "relative bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
                 logoBox.className = "w-12 h-12 bg-gradient-to-tr from-emerald-600 to-teal-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-emerald-200";
+                if(checkoutBtn) checkoutBtn.className = "flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center space-x-2 space-x-reverse";
+                if(productSaveBtn) productSaveBtn.className = "px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-sm";
             } else if (themeName === 'dark') {
                 heroBanner.className = "relative bg-gradient-to-r from-stone-800 via-stone-900 to-stone-800 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
                 logoBox.className = "w-12 h-12 bg-gradient-to-tr from-stone-800 to-stone-700 rounded-2xl flex items-center justify-center text-white shadow-md shadow-stone-400";
+                if(checkoutBtn) checkoutBtn.className = "flex-1 bg-stone-900 hover:bg-stone-800 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center space-x-2 space-x-reverse";
+                if(productSaveBtn) productSaveBtn.className = "px-6 py-2.5 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-sm font-bold shadow-sm";
             } else {
                 heroBanner.className = "relative bg-gradient-to-r from-rose-500 via-pink-500 to-rose-400 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
                 logoBox.className = "w-12 h-12 bg-gradient-to-tr from-rose-500 to-pink-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-rose-200";
+                if(checkoutBtn) checkoutBtn.className = "flex-1 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center space-x-2 space-x-reverse";
+                if(productSaveBtn) productSaveBtn.className = "px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-bold shadow-sm";
             }
+            renderCategoriesFilter();
+            renderProductsGrid();
+        }
+
+        function getActiveThemeClass(isActive) {
+            const t = window.currentTheme || 'rose';
+            if (!isActive) return 'bg-white text-stone-600 hover:bg-stone-100 border border-stone-200';
+            
+            if (t === 'purple') return 'bg-purple-600 text-white shadow-sm';
+            if (t === 'emerald') return 'bg-emerald-600 text-white shadow-sm';
+            if (t === 'dark') return 'bg-stone-900 text-white shadow-sm';
+            return 'bg-rose-600 text-white shadow-sm';
+        }
+
+        function getThemeTextClass() {
+            const t = window.currentTheme || 'rose';
+            if (t === 'purple') return 'text-purple-600';
+            if (t === 'emerald') return 'text-emerald-600';
+            if (t === 'dark') return 'text-stone-900';
+            return 'text-rose-600';
+        }
+
+        function getThemeButtonHoverClass() {
+            const t = window.currentTheme || 'rose';
+            if (t === 'purple') return 'bg-purple-50 hover:bg-purple-600 text-purple-600 hover:text-white';
+            if (t === 'emerald') return 'bg-emerald-50 hover:bg-emerald-600 text-emerald-600 hover:text-white';
+            if (t === 'dark') return 'bg-stone-100 hover:bg-stone-900 text-stone-800 hover:text-white';
+            return 'bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white';
         }
 
         function syncSettingsToUI() {
@@ -608,11 +649,11 @@
             const container = document.getElementById('categories-filter-container');
             const prodCategorySelect = document.getElementById('prod-category');
             
-            let html = `<button onclick="filterCategory('all')" class="px-5 py-2 rounded-full text-sm font-bold transition-all ${currentCategoryFilter === 'all' ? 'bg-rose-600 text-white shadow-sm' : 'bg-white text-stone-600 hover:bg-stone-100 border border-stone-200'}">الكل</button>`;
+            let html = `<button onclick="filterCategory('all')" class="px-5 py-2 rounded-full text-sm font-bold transition-all ${getActiveThemeClass(currentCategoryFilter === 'all')}">الكل</button>`;
             
             categories.forEach(cat => {
                 const isActive = currentCategoryFilter === cat;
-                html += `<button onclick="filterCategory('${cat}')" class="px-5 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap ${isActive ? 'bg-rose-600 text-white shadow-sm' : 'bg-white text-stone-600 hover:bg-stone-100 border border-stone-200'}">${cat}</button>`;
+                html += `<button onclick="filterCategory('${cat}')" class="px-5 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap ${getActiveThemeClass(isActive)}">${cat}</button>`;
             });
             container.innerHTML = html;
 
@@ -639,6 +680,8 @@
         function renderProductsGrid() {
             const grid = document.getElementById('products-grid');
             const countBadge = document.getElementById('product-count-badge');
+            const textClass = getThemeTextClass();
+            const btnHoverClass = getThemeButtonHoverClass();
 
             let filtered = products.filter(p => {
                 const matchesCategory = currentCategoryFilter === 'all' || p.category === currentCategoryFilter;
@@ -651,7 +694,7 @@
             if (filtered.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full py-16 text-center space-y-3">
-                        <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto text-2xl">
+                        <div class="w-16 h-16 bg-stone-50 text-stone-500 rounded-full flex items-center justify-center mx-auto text-2xl">
                             <i class="fa-solid fa-face-sad-tear"></i>
                         </div>
                         <h4 class="text-lg font-bold text-stone-700">عذراً، لم نجد منتجات مطابقة!</h4>
@@ -668,7 +711,7 @@
                     <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden flex flex-col group hover:shadow-md transition-all">
                         <div class="relative bg-stone-100 aspect-square overflow-hidden">
                             <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/fce7eb/be123c?text=Cosmetics'">
-                            <span class="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full shadow-sm ${isOut ? 'bg-stone-800 text-white' : 'bg-white/90 backdrop-blur-sm text-rose-600'}">
+                            <span class="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full shadow-sm ${isOut ? 'bg-stone-800 text-white' : 'bg-white/90 backdrop-blur-sm ' + textClass}">
                                 ${isOut ? 'نفذت الكمية' : p.category}
                             </span>
                         </div>
@@ -678,8 +721,8 @@
                                 <p class="text-xs text-stone-400 line-clamp-1">${p.desc || ''}</p>
                             </div>
                             <div class="flex items-center justify-between pt-2 border-t border-stone-100">
-                                <span class="text-base font-black text-rose-600">${p.price} ج.م</span>
-                                <button onclick="addToCart('${p.id}')" ${isOut ? 'disabled' : ''} class="${isOut ? 'bg-stone-200 text-stone-400 cursor-not-allowed' : 'bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white'} p-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center">
+                                <span class="text-base font-black ${textClass}">${p.price} ج.م</span>
+                                <button onclick="addToCart('${p.id}')" ${isOut ? 'disabled' : ''} class="${isOut ? 'bg-stone-200 text-stone-400 cursor-not-allowed' : btnHoverClass} p-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center">
                                     <i class="fa-solid fa-cart-plus"></i>
                                 </button>
                             </div>
@@ -744,6 +787,7 @@
         function renderCartItems() {
             const container = document.getElementById('cart-items-container');
             const totalPriceEl = document.getElementById('cart-total-price');
+            const textClass = getThemeTextClass();
 
             if (cart.length === 0) {
                 container.innerHTML = `
@@ -770,7 +814,7 @@
                             <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-xl border border-stone-200">
                             <div>
                                 <h5 class="text-xs font-bold text-stone-800 line-clamp-1">${item.name}</h5>
-                                <p class="text-xs font-bold text-rose-600 mt-0.5">${item.price} ج.م</p>
+                                <p class="text-xs font-bold ${textClass} mt-0.5">${item.price} ج.م</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2 space-x-reverse bg-stone-100 p-1 rounded-xl">
