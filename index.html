@@ -337,13 +337,18 @@
 
                     <div class="flex gap-2 pt-2">
                         <button type="submit" id="checkout-btn" class="flex-1 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md transition-all flex items-center justify-center space-x-2 space-x-reverse">
-                            <i class="fa-solid fa-check ml-2"></i>تأكيد الطلب الآن
+                            <i class="fa-brands fa-whatsapp text-lg ml-2"></i>تأكيد وإرسال الطلب عبر واتساب
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a id="floating-whatsapp" href="https://wa.me/" target="_blank" class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full flex items-center justify-center text-2xl shadow-2xl transition-all hover:scale-110">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <div id="admin-login-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-6">
@@ -402,16 +407,15 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-stone-500 mb-1">صورة المنتج (رفع من الجهاز)</label>
-                    <input type="file" id="prod-image-file" accept="image/*" class="w-full px-4 py-2 bg-stone-100 border border-stone-200 rounded-xl text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-rose-50 file:text-rose-700 hover:file:bg-rose-100">
-                    <p class="text-[11px] text-stone-400 mt-1">إن لم تقم باختيار صورة، سيتم استخدام صورة افتراضية.</p>
+                    <input type="file" id="prod-image-file" accept="image/*" class="w-full px-4 py-2 bg-stone-100 border border-stone-200 rounded-xl text-sm">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-stone-500 mb-1">وصف المنتج</label>
-                    <textarea id="prod-desc" rows="3" placeholder="مواصفات المنتج، المميزات، الاستخدام..." class="w-full px-4 py-2.5 bg-stone-100 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white"></textarea>
+                    <textarea id="prod-desc" rows="3" placeholder="مواصفات المنتج..." class="w-full px-4 py-2.5 bg-stone-100 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white"></textarea>
                 </div>
                 <div class="flex justify-end space-x-2 space-x-reverse pt-2">
                     <button type="button" onclick="closeProductModal()" class="px-5 py-2.5 bg-stone-100 text-stone-600 rounded-xl text-sm font-bold">إلغاء</button>
-                    <button type="submit" id="product-save-btn" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-bold shadow-sm">حفظ المنتج</button>
+                    <button type="submit" id="product-save-btn" class="px-6 py-2.5 bg-rose-600 text-white rounded-xl text-sm font-bold shadow-sm">حفظ المنتج</button>
                 </div>
             </form>
         </div>
@@ -453,9 +457,7 @@
         const INITIAL_CATEGORIES = ["مكياج عيون", "أحمر شفاه", "عناية بالبشرة", "عطور", "إكسسوارات"];
         const INITIAL_PRODUCTS = [
             { id: "prod-1", name: "أحمر شفاه مات ثابت - درجة وردي ساحر", category: "أحمر شفاه", price: 180, stock: "available", image: "https://placehold.co/400x400/fce7eb/be123c?text=Lipstick", desc: "أحمر شفاه يدوم طويلاً، مقاوم للماء وبدون جفاف للشفاه." },
-            { id: "prod-2", name: "ماسكارا تكثيف وتطويل الرموش السوداء", category: "مكياج عيون", price: 220, stock: "available", image: "https://placehold.co/400x400/fce7eb/be123c?text=Mascara", desc: "ماسكارا احترافية تمنح رموشك كثافة مضاعفة ومظهر جذاب طوال اليوم." },
-            { id: "prod-3", name: "سيروم فيتامين سي النقي لتشريق البشرة", category: "عناية بالبشرة", price: 350, stock: "available", image: "https://placehold.co/400x400/fce7eb/be123c?text=Vitamin+C", desc: "سيروم مغذي ومضاد للأكسدة يعيد حيوية البشرة ونضارتها الطبيعية." },
-            { id: "prod-4", name: "عطر رويال روز الفاخر للنساء", category: "عطور", price: 650, stock: "out", image: "https://placehold.co/400x400/fce7eb/be123c?text=Perfume", desc: "عطر ساحر يجمع بين عبير الورد الجوري والمسك الفاخر." }
+            { id: "prod-2", name: "ماسكارا تكثيف وتطويل الرموش السوداء", category: "مكياج عيون", price: 220, stock: "available", image: "https://placehold.co/400x400/fce7eb/be123c?text=Mascara", desc: "ماسكارا احترافية تمنح رموشك كثافة مضاعفة ومظهر جذاب طوال اليوم." }
         ];
 
         let settings = JSON.parse(localStorage.getItem('cosmetics_settings')) || DEFAULT_SETTINGS;
@@ -488,9 +490,10 @@
             const logoBox = document.getElementById('brand-logo-box');
             const checkoutBtn = document.getElementById('checkout-btn');
             const productSaveBtn = document.getElementById('product-save-btn');
+            const floatingWa = document.getElementById('floating-whatsapp');
             
-            // Global Theme Color Classes mappings
             window.currentTheme = themeName;
+            floatingWa.href = `https://wa.me/${settings.whatsapp}?text=` + encodeURIComponent("مرحباً، أستفسر عن منتجات المتجر.");
 
             if (themeName === 'purple') {
                 heroBanner.className = "relative bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
@@ -520,7 +523,6 @@
         function getActiveThemeClass(isActive) {
             const t = window.currentTheme || 'rose';
             if (!isActive) return 'bg-white text-stone-600 hover:bg-stone-100 border border-stone-200';
-            
             if (t === 'purple') return 'bg-purple-600 text-white shadow-sm';
             if (t === 'emerald') return 'bg-emerald-600 text-white shadow-sm';
             if (t === 'dark') return 'bg-stone-900 text-white shadow-sm';
@@ -568,60 +570,36 @@
 
         function showToast(title, message, isError = false) {
             const toast = document.getElementById('toast-notification');
-            const toastTitle = document.getElementById('toast-title');
-            const toastMsg = document.getElementById('toast-message');
-            const toastIcon = document.getElementById('toast-icon');
-
-            toastTitle.innerText = title;
-            toastMsg.innerText = message;
-            if (isError) {
-                toastIcon.innerHTML = '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
-            } else {
-                toastIcon.innerHTML = '<i class="fa-solid fa-circle-check text-rose-400"></i>';
-            }
-
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-message').innerText = message;
             toast.classList.remove('translate-y-24', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-24', 'opacity-0');
-            }, 3500);
+            setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 3500);
         }
 
         function switchView(viewName) {
             const storeView = document.getElementById('view-store');
             const adminView = document.getElementById('view-admin');
-
             if (viewName === 'store') {
                 storeView.classList.remove('hidden');
                 adminView.classList.add('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else if (viewName === 'admin') {
-                if (!isAdminLoggedIn) {
-                    toggleAdminLoginModal(true);
-                    return;
-                }
+            } else {
+                if (!isAdminLoggedIn) { toggleAdminLoginModal(true); return; }
                 storeView.classList.add('hidden');
                 adminView.classList.remove('hidden');
                 renderAdminDashboard();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function openAdminPortal() {
-            if (isAdminLoggedIn) {
-                switchView('admin');
-            } else {
-                toggleAdminLoginModal(true);
-            }
+            if (isAdminLoggedIn) switchView('admin');
+            else toggleAdminLoginModal(true);
         }
 
         function toggleAdminLoginModal(show) {
             const modal = document.getElementById('admin-login-modal');
-            if (show) {
-                modal.classList.remove('hidden');
-                document.getElementById('admin-password-input').value = '';
-            } else {
-                modal.classList.add('hidden');
-            }
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
         }
 
         function handleAdminLogin(event) {
@@ -632,9 +610,9 @@
                 sessionStorage.setItem('admin_logged', 'true');
                 toggleAdminLoginModal(false);
                 switchView('admin');
-                showToast('أهلاً بك يا أدمن', 'تم تسجيل الدخول بنجاح');
+                showToast('أهلاً بك', 'تم تسجيل الدخول بنجاح');
             } else {
-                showToast('خطأ في كلمة المرور', 'كلمة المرور غير صحيحة', true);
+                showToast('خطأ', 'كلمة المرور غير صحيحة', true);
             }
         }
 
@@ -642,7 +620,6 @@
             isAdminLoggedIn = false;
             sessionStorage.removeItem('admin_logged');
             switchView('store');
-            showToast('تسجيل خروج', 'تم خروجك من لوحة التحكم بنجاح');
         }
 
         function renderCategoriesFilter() {
@@ -650,7 +627,6 @@
             const prodCategorySelect = document.getElementById('prod-category');
             
             let html = `<button onclick="filterCategory('all')" class="px-5 py-2 rounded-full text-sm font-bold transition-all ${getActiveThemeClass(currentCategoryFilter === 'all')}">الكل</button>`;
-            
             categories.forEach(cat => {
                 const isActive = currentCategoryFilter === cat;
                 html += `<button onclick="filterCategory('${cat}')" class="px-5 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap ${getActiveThemeClass(isActive)}">${cat}</button>`;
@@ -659,9 +635,7 @@
 
             if (prodCategorySelect) {
                 let optionsHtml = '';
-                categories.forEach(cat => {
-                    optionsHtml += `<option value="${cat}">${cat}</option>`;
-                });
+                categories.forEach(cat => optionsHtml += `<option value="${cat}">${cat}</option>`);
                 prodCategorySelect.innerHTML = optionsHtml;
             }
         }
@@ -685,22 +659,13 @@
 
             let filtered = products.filter(p => {
                 const matchesCategory = currentCategoryFilter === 'all' || p.category === currentCategoryFilter;
-                const matchesSearch = p.name.toLowerCase().includes(searchQuery) || p.category.toLowerCase().includes(searchQuery);
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery);
                 return matchesCategory && matchesSearch;
             });
-
             countBadge.innerText = `${filtered.length} منتج`;
 
             if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-16 text-center space-y-3">
-                        <div class="w-16 h-16 bg-stone-50 text-stone-500 rounded-full flex items-center justify-center mx-auto text-2xl">
-                            <i class="fa-solid fa-face-sad-tear"></i>
-                        </div>
-                        <h4 class="text-lg font-bold text-stone-700">عذراً، لم نجد منتجات مطابقة!</h4>
-                        <p class="text-sm text-stone-400">جرب البحث بكلمة أخرى أو اختر قسماً مختلفاً.</p>
-                    </div>
-                `;
+                grid.innerHTML = `<div class="col-span-full py-16 text-center text-stone-400">لا توجد منتجات مطابقة.</div>`;
                 return;
             }
 
@@ -708,23 +673,20 @@
             filtered.forEach(p => {
                 const isOut = p.stock === 'out';
                 html += `
-                    <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden flex flex-col group hover:shadow-md transition-all">
+                    <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden flex flex-col group">
                         <div class="relative bg-stone-100 aspect-square overflow-hidden">
-                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/fce7eb/be123c?text=Cosmetics'">
+                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/fce7eb/be123c?text=Item'">
                             <span class="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full shadow-sm ${isOut ? 'bg-stone-800 text-white' : 'bg-white/90 backdrop-blur-sm ' + textClass}">
                                 ${isOut ? 'نفذت الكمية' : p.category}
                             </span>
                         </div>
                         <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
-                            <div class="space-y-1">
+                            <div>
                                 <h4 class="text-sm font-bold text-stone-800 line-clamp-2">${p.name}</h4>
-                                <p class="text-xs text-stone-400 line-clamp-1">${p.desc || ''}</p>
                             </div>
                             <div class="flex items-center justify-between pt-2 border-t border-stone-100">
                                 <span class="text-base font-black ${textClass}">${p.price} ج.م</span>
-                                <button onclick="addToCart('${p.id}')" ${isOut ? 'disabled' : ''} class="${isOut ? 'bg-stone-200 text-stone-400 cursor-not-allowed' : btnHoverClass} p-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center">
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                </button>
+                                <button onclick="addToCart('${p.id}')" ${isOut ? 'disabled' : ''} class="${isOut ? 'bg-stone-200 text-stone-400 cursor-not-allowed' : btnHoverClass} p-2.5 rounded-xl text-sm font-bold transition-all"><i class="fa-solid fa-cart-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -735,39 +697,26 @@
 
         function toggleCartModal(show) {
             const modal = document.getElementById('cart-modal');
-            if (show) {
-                modal.classList.remove('hidden');
-                renderCartItems();
-            } else {
-                modal.classList.add('hidden');
-            }
+            if (show) { modal.classList.remove('hidden'); renderCartItems(); }
+            else { modal.classList.add('hidden'); }
         }
 
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
             if (!product || product.stock === 'out') return;
-
             const existing = cart.find(item => item.id === productId);
-            if (existing) {
-                existing.quantity += 1;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-
+            if (existing) existing.quantity += 1;
+            else cart.push({ ...product, quantity: 1 });
             saveData();
             updateCartBadge();
-            showToast('تمت الإضافة للسلة', `تمت إضافة "${product.name}" بنجاح`);
+            showToast('تمت الإضافة', 'تمت إضافة المنتج للسلة بنجاح');
         }
 
         function updateCartQuantity(productId, delta) {
             const item = cart.find(i => i.id === productId);
             if (!item) return;
-
             item.quantity += delta;
-            if (item.quantity <= 0) {
-                cart = cart.filter(i => i.id !== productId);
-            }
-
+            if (item.quantity <= 0) cart = cart.filter(i => i.id !== productId);
             saveData();
             updateCartBadge();
             renderCartItems();
@@ -776,12 +725,8 @@
         function updateCartBadge() {
             const badge = document.getElementById('cart-badge');
             const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-            if (totalCount > 0) {
-                badge.innerText = totalCount;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
+            if (totalCount > 0) { badge.innerText = totalCount; badge.classList.remove('hidden'); }
+            else { badge.classList.add('hidden'); }
         }
 
         function renderCartItems() {
@@ -790,138 +735,103 @@
             const textClass = getThemeTextClass();
 
             if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="py-12 text-center space-y-3">
-                        <div class="w-16 h-16 bg-stone-100 text-stone-400 rounded-full flex items-center justify-center mx-auto text-2xl">
-                            <i class="fa-solid fa-bag-shopping"></i>
-                        </div>
-                        <h4 class="text-base font-bold text-stone-700">سلة المشتريات فارغة</h4>
-                        <p class="text-xs text-stone-400">أضف بعض المنتجات الرائعة لتراها هنا.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="py-12 text-center text-stone-400">السلة فارغة</div>`;
                 totalPriceEl.innerText = '0 ج.م';
                 return;
             }
-
-            let html = '';
-            let total = 0;
-
+            let html = '', total = 0;
             cart.forEach(item => {
                 total += item.price * item.quantity;
                 html += `
                     <div class="flex items-center justify-between py-3">
                         <div class="flex items-center space-x-3 space-x-reverse">
-                            <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-xl border border-stone-200">
+                            <img src="${item.image}" class="w-14 h-14 object-cover rounded-xl border">
                             <div>
-                                <h5 class="text-xs font-bold text-stone-800 line-clamp-1">${item.name}</h5>
-                                <p class="text-xs font-bold ${textClass} mt-0.5">${item.price} ج.م</p>
+                                <h5 class="text-xs font-bold text-stone-800">${item.name}</h5>
+                                <p class="text-xs ${textClass} font-bold">${item.price} ج.م</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2 space-x-reverse bg-stone-100 p-1 rounded-xl">
-                            <button onclick="updateCartQuantity('${item.id}', -1)" class="w-7 h-7 bg-white hover:bg-stone-200 rounded-lg text-stone-700 font-bold flex items-center justify-center text-xs">-</button>
+                            <button onclick="updateCartQuantity('${item.id}', -1)" class="w-7 h-7 bg-white rounded-lg font-bold">-</button>
                             <span class="text-xs font-bold px-2">${item.quantity}</span>
-                            <button onclick="updateCartQuantity('${item.id}', 1)" class="w-7 h-7 bg-white hover:bg-stone-200 rounded-lg text-stone-700 font-bold flex items-center justify-center text-xs">+</button>
+                            <button onclick="updateCartQuantity('${item.id}', 1)" class="w-7 h-7 bg-white rounded-lg font-bold">+</button>
                         </div>
                     </div>
                 `;
             });
-
             container.innerHTML = html;
             totalPriceEl.innerText = `${total} ج.م`;
         }
 
         function handlePaymentChange(method) {
             const box = document.getElementById('payment-instruction-box');
-            const txt = document.getElementById('payment-instruction-text');
-            if (method === 'إنستا باي') {
-                box.classList.remove('hidden');
-                txt.innerText = `يرجى التحويل على حساب إنستا باي: (${settings.instapay || 'غير متوفر'}) ثم إرسال الإيصال.`;
-            } else if (method === 'محفظة إلكترونية') {
-                box.classList.remove('hidden');
-                txt.innerText = `يرجى التحويل على رقم المحفظة: (${settings.whatsapp}) ثم إرسال الإيصال.`;
-            } else {
-                box.classList.add('hidden');
-            }
+            if (method !== 'الدفع عند الاستلام') box.classList.remove('hidden');
+            else box.classList.add('hidden');
         }
 
         function submitOrder(event) {
             event.preventDefault();
-            if (cart.length === 0) {
-                showToast('السلة فارغة', 'أضف منتجات أولاً قبل إتمام الطلب', true);
-                return;
-            }
-
-            const name = document.getElementById('customer-name').value.trim();
-            const phone = document.getElementById('customer-phone').value.trim();
-            const address = document.getElementById('customer-address').value.trim();
+            if (cart.length === 0) return;
+            const name = document.getElementById('customer-name').value;
+            const phone = document.getElementById('customer-phone').value;
+            const address = document.getElementById('customer-address').value;
             const deliveryMethod = document.getElementById('delivery-method').value;
             const paymentMethod = document.getElementById('payment-method').value;
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-            const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
+            const orderId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
             const newOrder = {
-                id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+                id: orderId,
                 timestamp: new Date().toLocaleString('ar-EG'),
                 customer: { name, phone, address },
                 items: [...cart],
                 deliveryMethod,
                 paymentMethod,
-                total: totalAmount,
+                total,
                 status: 'جديد',
                 unread: true
             };
-
             orders.unshift(newOrder);
+            
+            // Build WhatsApp Message
+            let itemsSummary = cart.map(i => `- ${i.name} (الكمية: ${i.quantity})`).join('\n');
+            let waMessage = `🛍️ *طلب جديد عبر المتجر*\n\n` +
+                            `📌 *رقم الطلب:* ${orderId}\n` +
+                            `👤 *الاسم:* ${name}\n` +
+                            `📞 *الهاتف:* ${phone}\n` +
+                            `📍 *العنوان:* ${address}\n` +
+                            `🚚 *الاستلام:* ${deliveryMethod}\n` +
+                            `💳 *الدفع:* ${paymentMethod}\n\n` +
+                            `📦 *المنتجات المطلوبة:*\n${itemsSummary}\n\n` +
+                            `💰 *الإجمالي الكلي:* ${total} ج.م`;
+
             cart = [];
             saveData();
             updateCartBadge();
             toggleCartModal(false);
+            showToast('تم الطلب بنجاح', 'جارٍ تحويلك لواتساب لإرسال الطلب...');
 
-            document.getElementById('checkout-form').reset();
-            showToast('تم إرسال الطلب بنجاح!', 'تم تسجيل طلبك وسنتواصل معك قريباً.');
-
-            const waText = encodeURIComponent(`مرحباً، أريد تأكيد طلبي الجديد رقم: ${newOrder.id}\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}\nالإجمالي: ${totalAmount} ج.م\nطريقة الدفع: ${paymentMethod}`);
-            window.open(`https://wa.me/${settings.whatsapp}?text=${waText}`, '_blank');
+            setTimeout(() => {
+                window.open(`https://wa.me/${settings.whatsapp}?text=` + encodeURIComponent(waMessage), '_blank');
+            }, 1000);
         }
 
         function switchAdminTab(tabName) {
             currentAdminTab = tabName;
-            const tabs = ['orders', 'products', 'categories', 'settings'];
-            
-            tabs.forEach(t => {
+            ['orders', 'products', 'categories', 'settings'].forEach(t => {
                 const btn = document.getElementById(`tab-btn-${t}`);
                 const content = document.getElementById(`admin-tab-${t}`);
-                if (t === tabName) {
-                    btn.className = 'flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-rose-600 text-white shadow-sm transition-all flex items-center justify-center space-x-2 space-x-reverse';
-                    content.classList.remove('hidden');
-                } else {
-                    btn.className = 'flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-stone-100 text-stone-600 hover:bg-stone-200 transition-all flex items-center justify-center space-x-2 space-x-reverse';
-                    content.classList.add('hidden');
-                }
+                if (t === tabName) { btn.className = 'flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-rose-600 text-white shadow-sm'; content.classList.remove('hidden'); }
+                else { btn.className = 'flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-stone-100 text-stone-600'; content.classList.add('hidden'); }
             });
-
             renderAdminDashboard();
         }
 
         function renderAdminDashboard() {
-            const totalProductsCount = products.length;
-            const outStockCount = products.filter(p => p.stock === 'out').length;
-            const totalOrdersCount = orders.length;
-            const newOrdersCount = orders.filter(o => o.unread).length;
-
-            document.getElementById('stat-total-products').innerText = totalProductsCount;
-            document.getElementById('stat-out-stock').innerText = outStockCount;
-            document.getElementById('stat-total-orders').innerText = totalOrdersCount;
-            document.getElementById('stat-new-orders').innerText = newOrdersCount;
-
-            const adminOrdersBadge = document.getElementById('admin-orders-badge');
-            if (newOrdersCount > 0) {
-                adminOrdersBadge.innerText = newOrdersCount;
-                adminOrdersBadge.classList.remove('hidden');
-            } else {
-                adminOrdersBadge.classList.add('hidden');
-            }
-
+            document.getElementById('stat-total-products').innerText = products.length;
+            document.getElementById('stat-out-stock').innerText = products.filter(p => p.stock === 'out').length;
+            document.getElementById('stat-total-orders').innerText = orders.length;
+            document.getElementById('stat-new-orders').innerText = orders.filter(o => o.unread).length;
             if (currentAdminTab === 'orders') renderAdminOrders();
             if (currentAdminTab === 'products') renderAdminProducts();
             if (currentAdminTab === 'categories') renderAdminCategories();
@@ -929,253 +839,69 @@
 
         function renderAdminOrders() {
             const tbody = document.getElementById('admin-orders-table-body');
-            if (orders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-stone-400">لا توجد طلبات عملاء حتى الآن.</td></tr>`;
-                return;
-            }
-
+            if (orders.length === 0) { tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-stone-400">لا توجد طلبات</td></tr>`; return; }
             let html = '';
             orders.forEach(o => {
-                let itemsListStr = o.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
                 html += `
-                    <tr class="hover:bg-stone-50 transition-colors ${o.unread ? 'bg-rose-50/40 font-semibold' : ''}">
-                        <td class="p-4">
-                            <span class="text-xs font-black text-rose-600 block">${o.id}</span>
-                            <span class="text-[11px] text-stone-400">${o.timestamp}</span>
-                        </td>
-                        <td class="p-4">
-                            <p class="font-bold text-stone-800">${o.customer.name}</p>
-                            <p class="text-xs text-stone-500">${o.customer.phone}</p>
-                            <p class="text-[11px] text-stone-400 line-clamp-1">${o.customer.address}</p>
-                        </td>
-                        <td class="p-4 text-xs text-stone-600 max-w-xs">
-                            <p class="line-clamp-2">${itemsListStr}</p>
-                        </td>
-                        <td class="p-4 text-xs">
-                            <span class="block font-bold text-stone-700">${o.deliveryMethod}</span>
-                            <span class="text-stone-400">${o.paymentMethod}</span>
-                        </td>
-                        <td class="p-4 font-black text-rose-600">${o.total} ج.م</td>
-                        <td class="p-4">
-                            <select onchange="updateOrderStatus('${o.id}', this.value)" class="text-xs px-2 py-1 bg-white border border-stone-200 rounded-lg font-bold">
-                                <option value="جديد" ${o.status === 'جديد' ? 'selected' : ''}>جديد</option>
-                                <option value="جاري التجهيز" ${o.status === 'جاري التجهيز' ? 'selected' : ''}>جاري التجهيز</option>
-                                <option value="تم التوصيل" ${o.status === 'تم التوصيل' ? 'selected' : ''}>تم التوصيل</option>
-                            </select>
-                        </td>
-                        <td class="p-4 space-x-2 space-x-reverse">
-                            <button onclick="deleteOrder('${o.id}')" class="text-red-500 hover:text-red-700 text-xs font-bold px-2 py-1 bg-red-50 rounded-lg">حذف</button>
-                        </td>
+                    <tr class="border-b">
+                        <td class="p-4 text-xs font-bold text-rose-600">${o.id}</td>
+                        <td class="p-4 text-xs">${o.customer.name}<br>${o.customer.phone}</td>
+                        <td class="p-4 text-xs">${o.items.map(i => i.name + ' (x' + i.quantity + ')').join(', ')}</td>
+                        <td class="p-4 text-xs">${o.deliveryMethod}<br>${o.paymentMethod}</td>
+                        <td class="p-4 text-xs font-black">${o.total} ج.م</td>
+                        <td class="p-4 text-xs">${o.status}</td>
+                        <td class="p-4 text-xs"><button onclick="orders = orders.filter(x => x.id != '${o.id}'); saveData(); renderAdminDashboard();" class="text-red-500 font-bold">حذف</button></td>
                     </tr>
                 `;
             });
             tbody.innerHTML = html;
-
-            orders.forEach(o => o.unread = false);
-            saveData();
-        }
-
-        function updateOrderStatus(orderId, newStatus) {
-            const order = orders.find(o => o.id === orderId);
-            if (order) {
-                order.status = newStatus;
-                saveData();
-                showToast('تحديث الحالة', 'تم تحديث حالة الطلب بنجاح');
-            }
-        }
-
-        function deleteOrder(orderId) {
-            if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
-                orders = orders.filter(o => o.id !== orderId);
-                saveData();
-                renderAdminDashboard();
-                showToast('حذف الطلب', 'تم حذف الطلب بنجاح');
-            }
-        }
-
-        function clearAllOrders() {
-            if (confirm('هل أنت متأكد من مسح جميع سجل الطلبات؟')) {
-                orders = [];
-                saveData();
-                renderAdminDashboard();
-                showToast('مسح السجل', 'تم تفريغ سجل الطلبات بالكامل');
-            }
         }
 
         function renderAdminProducts() {
             const grid = document.getElementById('admin-products-grid');
-            if (products.length === 0) {
-                grid.innerHTML = `<p class="col-span-full text-center text-stone-400 py-8">لا توجد منتجات مسجلة.</p>`;
-                return;
-            }
-
             let html = '';
             products.forEach(p => {
-                const isOut = p.stock === 'out';
                 html += `
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-stone-200 flex items-center space-x-4 space-x-reverse">
-                        <img src="${p.image}" class="w-16 h-16 object-cover rounded-xl border border-stone-100" onerror="this.src='https://placehold.co/400x400/fce7eb/be123c?text=Img'">
-                        <div class="flex-1 min-w-0">
-                            <h4 class="text-sm font-bold text-stone-800 truncate">${p.name}</h4>
-                            <p class="text-xs text-rose-600 font-bold mt-0.5">${p.price} ج.م</p>
-                            <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${isOut ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}">
-                                ${isOut ? 'نفذت الكمية' : 'متوفر'}
-                            </span>
-                        </div>
-                        <div class="flex flex-col space-y-1">
-                            <button onclick="openProductModal('${p.id}')" class="p-2 bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-lg text-xs"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteProduct('${p.id}')" class="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
-                        </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border flex items-center justify-between">
+                        <span class="font-bold text-sm">${p.name}</span>
+                        <button onclick="products = products.filter(x => x.id != '${p.id}'); saveData(); renderAdminProducts(); renderProductsGrid();" class="text-red-500 text-xs font-bold">حذف</button>
                     </div>
                 `;
             });
             grid.innerHTML = html;
         }
 
-        function openProductModal(productId = null) {
-            const modal = document.getElementById('product-modal');
-            const title = document.getElementById('product-modal-title');
-            const form = document.getElementById('product-form');
-            form.reset();
-            document.getElementById('product-edit-id').value = '';
-
-            const catSelect = document.getElementById('prod-category');
-            let opts = '';
-            categories.forEach(c => opts += `<option value="${c}">${c}</option>`);
-            catSelect.innerHTML = opts;
-
-            if (productId) {
-                const p = products.find(item => item.id === productId);
-                if (p) {
-                    title.innerText = 'تعديل المنتج';
-                    document.getElementById('product-edit-id').value = p.id;
-                    document.getElementById('prod-name').value = p.name;
-                    document.getElementById('prod-category').value = p.category;
-                    document.getElementById('prod-price').value = p.price;
-                    document.getElementById('prod-stock').value = p.stock;
-                    document.getElementById('prod-desc').value = p.desc || '';
-                }
-            } else {
-                title.innerText = 'إضافة منتج جديد';
-            }
-
-            modal.classList.remove('hidden');
+        function renderAdminCategories() {
+            const list = document.getElementById('admin-categories-list');
+            let html = '';
+            categories.forEach(c => html += `<span class="bg-stone-100 px-3 py-1 rounded-lg text-xs font-bold">${c}</span>`);
+            list.innerHTML = html;
         }
 
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.add('hidden');
-        }
+        function openProductModal() { document.getElementById('product-modal').classList.remove('hidden'); }
+        function closeProductModal() { document.getElementById('product-modal').classList.add('hidden'); }
 
         function handleSaveProduct(event) {
             event.preventDefault();
-            const editId = document.getElementById('product-edit-id').value;
-            const name = document.getElementById('prod-name').value.trim();
-            const category = document.getElementById('prod-category').value;
+            const name = document.getElementById('prod-name').value;
             const price = parseFloat(document.getElementById('prod-price').value);
-            const stock = document.getElementById('prod-stock').value;
-            const desc = document.getElementById('prod-desc').value.trim();
-            const imageFile = document.getElementById('prod-image-file').files[0];
-
-            if (imageFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    saveProductData(editId, name, category, price, stock, desc, e.target.result);
-                };
-                reader.readAsDataURL(imageFile);
-            } else {
-                let defaultImg = 'https://placehold.co/400x400/fce7eb/be123c?text=Cosmetics';
-                if (editId) {
-                    const existing = products.find(p => p.id === editId);
-                    if (existing) defaultImg = existing.image;
-                }
-                saveProductData(editId, name, category, price, stock, desc, defaultImg);
-            }
-        }
-
-        function saveProductData(editId, name, category, price, stock, desc, imageUrl) {
-            if (editId) {
-                const p = products.find(item => item.id === editId);
-                if (p) {
-                    p.name = name;
-                    p.category = category;
-                    p.price = price;
-                    p.stock = stock;
-                    p.desc = desc;
-                    p.image = imageUrl;
-                }
-                showToast('تعديل منتج', 'تم تحديث بيانات المنتج بنجاح');
-            } else {
-                const newProd = {
-                    id: 'prod-' + Date.now(),
-                    name,
-                    category,
-                    price,
-                    stock,
-                    desc,
-                    image: imageUrl
-                };
-                products.push(newProd);
-                showToast('إضافة منتج', 'تمت إضافة المنتج الجديد بنجاح');
-            }
-
+            const desc = document.getElementById('prod-desc').value;
+            products.push({ id: 'prod-' + Date.now(), name, category: categories[0], price, stock: 'available', image: 'https://placehold.co/400x400/fce7eb/be123c?text=New', desc });
             saveData();
             closeProductModal();
-            renderAdminDashboard();
             renderProductsGrid();
-        }
-
-        function deleteProduct(productId) {
-            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
-                products = products.filter(p => p.id !== productId);
-                saveData();
-                renderAdminDashboard();
-                renderProductsGrid();
-                showToast('حذف المنتج', 'تم حذف المنتج بنجاح');
-            }
-        }
-
-        function renderAdminCategories() {
-            const listContainer = document.getElementById('admin-categories-list');
-            let html = '';
-            categories.forEach(cat => {
-                html += `
-                    <div class="flex items-center space-x-2 space-x-reverse bg-stone-100 px-4 py-2 rounded-xl text-sm font-bold text-stone-700">
-                        <span>${cat}</span>
-                        <button onclick="deleteCategory('${cat}')" class="text-red-500 hover:text-red-700 ml-1"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                `;
-            });
-            listContainer.innerHTML = html;
+            showToast('تم الحفظ', 'تمت إضافة المنتج بنجاح');
         }
 
         function handleAddCategory(event) {
             event.preventDefault();
-            const input = document.getElementById('new-category-name');
-            const catName = input.value.trim();
-            if (catName && !categories.includes(catName)) {
-                categories.push(catName);
-                saveData();
-                input.value = '';
-                renderCategoriesFilter();
-                renderAdminCategories();
-                showToast('إضافة فئة', 'تمت إضافة الفئة بنجاح');
-            } else {
-                showToast('خطأ', 'الفئة موجودة مسبقاً أو الاسم فارغ', true);
-            }
-        }
-
-        function deleteCategory(catName) {
-            if (categories.length <= 1) {
-                showToast('خطأ', 'لا يمكن حذف آخر فئة متبقية', true);
-                return;
-            }
-            if (confirm(`هل أنت متأكد من حذف فئة "${catName}"؟`)) {
-                categories = categories.filter(c => c !== catName);
+            const name = document.getElementById('new-category-name').value.trim();
+            if (name && !categories.includes(name)) {
+                categories.push(name);
                 saveData();
                 renderCategoriesFilter();
-                renderAdminCategories();
-                renderProductsGrid();
-                showToast('حذف فئة', 'تم حذف الفئة بنجاح');
+                document.getElementById('new-category-name').value = '';
+                showToast('تم', 'تمت إضافة الفئة');
             }
         }
 
@@ -1187,16 +913,14 @@
             settings.heroDesc = document.getElementById('setting-hero-desc').value.trim();
             settings.whatsapp = document.getElementById('setting-whatsapp').value.trim();
             settings.instapay = document.getElementById('setting-instapay').value.trim();
-            
+
             const newPass = document.getElementById('setting-password').value.trim();
-            if (newPass) {
-                settings.adminPassword = newPass;
-            }
+            if (newPass) settings.adminPassword = newPass;
 
             saveData();
             applyTheme(settings.theme);
             syncSettingsToUI();
-            showToast('حفظ الإعدادات', 'تم تحديث إعدادات المتجر والمظهر بنجاح');
+            showToast('تم الحفظ', 'تم تحديث الإعدادات بنجاح');
         }
     </script>
 </body>
