@@ -34,13 +34,12 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-stone-50 text-stone-800 min-h-screen flex flex-col">
+<body id="page-body" class="bg-stone-50 text-stone-800 min-h-screen flex flex-col">
 
     <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-rose-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Logo & Title -->
             <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="switchView('store')">
-                <div class="w-12 h-12 bg-gradient-to-tr from-rose-500 to-pink-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-rose-200">
+                <div id="brand-logo-box" class="w-12 h-12 bg-gradient-to-tr from-rose-500 to-pink-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-rose-200">
                     <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
                 </div>
                 <div>
@@ -49,7 +48,6 @@
                 </div>
             </div>
 
-            <!-- Search Bar (Desktop) -->
             <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-stone-400">
@@ -59,16 +57,13 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex items-center space-x-3 space-x-reverse">
-                <!-- Cart Button -->
                 <button onclick="toggleCartModal(true)" class="relative p-2.5 text-stone-700 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-colors flex items-center space-x-2 space-x-reverse">
                     <i class="fa-solid fa-bag-shopping text-xl"></i>
                     <span id="cart-badge" class="absolute -top-1 -right-1 bg-rose-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-sm hidden">0</span>
                     <span class="hidden sm:inline text-sm font-semibold">السلة</span>
                 </button>
 
-                <!-- Admin Access / Dashboard Button -->
                 <button id="admin-nav-btn" onclick="openAdminPortal()" class="bg-stone-900 text-white hover:bg-rose-600 px-4 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center space-x-2 space-x-reverse">
                     <i class="fa-solid fa-lock text-xs"></i>
                     <span>لوحة التحكم</span>
@@ -76,7 +71,6 @@
             </div>
         </div>
 
-        <!-- Mobile Search Bar -->
         <div class="md:hidden px-4 pb-3">
             <div class="relative w-full">
                 <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-stone-400">
@@ -88,10 +82,8 @@
     </header>
 
     <main id="main-content" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <!-- Store View -->
         <div id="view-store" class="space-y-8">
-            <!-- Hero Banner -->
-            <div class="relative bg-gradient-to-r from-rose-500 via-pink-500 to-rose-400 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden">
+            <div id="hero-banner" class="relative bg-gradient-to-r from-rose-500 via-pink-500 to-rose-400 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden">
                 <div class="absolute -left-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="relative z-10 max-w-xl space-y-4">
                     <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">عرض خاص لفترة محدودة</span>
@@ -103,24 +95,19 @@
                 </div>
             </div>
 
-            <!-- Categories Filter -->
             <div id="catalog-section" class="space-y-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-xl font-bold text-stone-800">أقسام المنتجات</h3>
                     <span id="product-count-badge" class="text-xs font-bold text-stone-500 bg-stone-200 px-3 py-1 rounded-full">0 منتج</span>
                 </div>
                 <div id="categories-filter-container" class="flex items-center space-x-2 space-x-reverse overflow-x-auto pb-2 hide-scrollbar">
-                    <!-- Dynamic Categories Pills -->
                 </div>
             </div>
 
-            <!-- Product Grid -->
             <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                <!-- Dynamic Products -->
             </div>
         </div>
 
-        <!-- Admin Dashboard View -->
         <div id="view-admin" class="hidden space-y-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
                 <div>
@@ -137,7 +124,6 @@
                 </div>
             </div>
 
-            <!-- Statistics Cards -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 flex items-center space-x-4 space-x-reverse">
                     <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center text-xl font-bold">
@@ -177,7 +163,6 @@
                 </div>
             </div>
 
-            <!-- Admin Tabs Navigation -->
             <div class="bg-white p-2 rounded-2xl shadow-sm border border-stone-200 flex flex-wrap gap-2">
                 <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-rose-600 text-white shadow-sm transition-all flex items-center justify-center space-x-2 space-x-reverse">
                     <i class="fa-solid fa-receipt"></i>
@@ -198,7 +183,6 @@
                 </button>
             </div>
 
-            <!-- Tab Content: Orders -->
             <div id="admin-tab-orders" class="space-y-4">
                 <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
                     <div class="p-6 border-b border-stone-100 flex items-center justify-between">
@@ -219,14 +203,12 @@
                                 </tr>
                             </thead>
                             <tbody id="admin-orders-table-body" class="divide-y divide-stone-100 text-sm">
-                                <!-- Dynamic Orders -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab Content: Products -->
             <div id="admin-tab-products" class="hidden space-y-6">
                 <div class="flex items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
                     <h3 class="text-lg font-bold text-stone-800">قائمة المنتجات</h3>
@@ -235,11 +217,9 @@
                     </button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="admin-products-grid">
-                    <!-- Dynamic Admin Products Cards -->
                 </div>
             </div>
 
-            <!-- Tab Content: Categories -->
             <div id="admin-tab-categories" class="hidden space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-6">
                     <h3 class="text-lg font-bold text-stone-800">إضافة فئة جديدة</h3>
@@ -251,12 +231,10 @@
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
                     <h3 class="text-lg font-bold text-stone-800 mb-4">الفئات الحالية</h3>
                     <div id="admin-categories-list" class="flex flex-wrap gap-2">
-                        <!-- Dynamic Categories Chips -->
                     </div>
                 </div>
             </div>
 
-            <!-- Tab Content: Settings (Updated to include Hero Title & Description controls) -->
             <div id="admin-tab-settings" class="hidden space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-6">
                     <h3 class="text-lg font-bold text-stone-800">إعدادات المتجر العامة والواجهة الرئيسية</h3>
@@ -264,6 +242,15 @@
                         <div>
                             <label class="block text-xs font-bold text-stone-500 mb-1">اسم المتجر</label>
                             <input type="text" id="setting-shop-name" required class="w-full px-4 py-2.5 bg-stone-100 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-500 mb-1">مظهر المتجر (Theme)</label>
+                            <select id="setting-theme" class="w-full px-4 py-2.5 bg-stone-100 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white">
+                                <option value="rose">مظهر وردي أنيق (Rose)</option>
+                                <option value="purple">مظهر بنفسجي ملكي (Purple)</option>
+                                <option value="emerald">مظهر أخضر هادئ (Emerald)</option>
+                                <option value="dark">مظهر داكن عصري (Dark)</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-stone-500 mb-1">العنوان الرئيسي البارز في الواجهة (Hero Title)</label>
@@ -294,7 +281,6 @@
 
     <div id="cart-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex justify-end transition-all">
         <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
-            <!-- Modal Header -->
             <div class="p-6 border-b border-stone-100 flex items-center justify-between">
                 <div class="flex items-center space-x-2 space-x-reverse">
                     <i class="fa-solid fa-bag-shopping text-rose-600 text-xl"></i>
@@ -305,12 +291,9 @@
                 </button>
             </div>
 
-            <!-- Cart Body / Items List -->
             <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-stone-100">
-                <!-- Cart items dynamically rendered -->
             </div>
 
-            <!-- Checkout Form & Summary -->
             <div id="checkout-section" class="border-t border-stone-100 p-6 bg-stone-50 space-y-4">
                 <div class="flex items-center justify-between text-base font-bold text-stone-800">
                     <span>إجمالي المشتريات:</span>
@@ -347,7 +330,6 @@
                         </div>
                     </div>
 
-                    <!-- Payment instructions banner -->
                     <div id="payment-instruction-box" class="hidden p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 space-y-1">
                         <p class="font-bold"><i class="fa-solid fa-circle-info ml-1"></i>تعليمات الدفع:</p>
                         <p id="payment-instruction-text">يرجى التحويل على الحساب المرفق وإرفاق إيصال التحويل مع تفاصيل الطلب.</p>
@@ -404,7 +386,6 @@
                     <div>
                         <label class="block text-xs font-bold text-stone-500 mb-1">الفئة</label>
                         <select id="prod-category" required class="w-full px-4 py-2.5 bg-stone-100 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white">
-                            <!-- Dynamic Categories options -->
                         </select>
                     </div>
                     <div>
@@ -436,7 +417,6 @@
         </div>
     </div>
 
-    <!-- Toast Notification Banner -->
     <div id="toast-notification" class="fixed bottom-6 left-6 z-50 bg-stone-900 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center space-x-3 space-x-reverse transform translate-y-24 opacity-0 transition-all duration-300">
         <div id="toast-icon" class="text-rose-400 text-lg"><i class="fa-solid fa-circle-check"></i></div>
         <div>
@@ -460,9 +440,9 @@
     </footer>
 
     <script>
-        // Initial Default State & Data
         const DEFAULT_SETTINGS = {
             shopName: "متجر الجمال والعناية",
+            theme: "rose",
             heroTitle: "تألقي كل يوم بأجمل إطلالة",
             heroDesc: "اكتشفي تشكيلة مميزة من أحدث مستحضرات التجميل والعناية بالبشرة بأفضل الأسعار. اطلبي الآن وسيصلك طلبك حتى باب البيت!",
             whatsapp: "201000000000",
@@ -471,49 +451,15 @@
         };
 
         const INITIAL_CATEGORIES = ["مكياج عيون", "أحمر شفاه", "عناية بالبشرة", "عطور", "إكسسوارات"];
-
         const INITIAL_PRODUCTS = [
-            {
-                id: "prod-1",
-                name: "أحمر شفاه مات ثابت - درجة وردي ساحر",
-                category: "أحمر شفاه",
-                price: 180,
-                stock: "available",
-                image: "https://placehold.co/400x400/fce7eb/be123c?text=Lipstick",
-                desc: "أحمر شفاه يدوم طويلاً، مقاوم للماء وبدون جفاف للشفاه."
-            },
-            {
-                id: "prod-2",
-                name: "ماسكارا تكثيف وتطويل الرموش السوداء",
-                category: "مكياج عيون",
-                price: 220,
-                stock: "available",
-                image: "https://placehold.co/400x400/fce7eb/be123c?text=Mascara",
-                desc: "ماسكارا احترافية تمنح رموشك كثافة مضاعفة ومظهر جذاب طوال اليوم."
-            },
-            {
-                id: "prod-3",
-                name: "سيروم فيتامين سي النقي لتشريق البشرة",
-                category: "عناية بالبشرة",
-                price: 350,
-                stock: "available",
-                image: "https://placehold.co/400x400/fce7eb/be123c?text=Vitamin+C",
-                desc: "سيروم مغذي ومضاد للأكسدة يعيد حيوية البشرة ونضارتها الطبيعية."
-            },
-            {
-                id: "prod-4",
-                name: "عطر رويال روز الفاخر للنساء",
-                category: "عطور",
-                price: 650,
-                stock: "out",
-                image: "https://placehold.co/400x400/fce7eb/be123c?text=Perfume",
-                desc: "عطر ساحر يجمع بين عبير الورد الجوري والمسك الفاخر."
-            }
+            { id: "prod-1", name: "أحمر شفاه مات ثابت - درجة وردي ساحر", category: "أحمر شفاه", price: 180, stock: "available", image: "https://placehold.co/400x400/fce7eb/be123c?text=Lipstick", desc: "أحمر شفاه يدوم طويلاً، مقاوم للماء وبدون جفاف للشفاه." },
+            { id: "prod-2", name: "ماسكارا تكثيف وتطويل الرموش السوداء", category: "مكياج عيون", price: 220, stock: "available", image: "https://placehold.co/400x400/fce7eb/be123c?text=Mascara", desc: "ماسكارا احترافية تمنح رموشك كثافة مضاعفة ومظهر جذاب طوال اليوم." },
+            { id: "prod-3", name: "سيروم فيتامين سي النقي لتشريق البشرة", category: "عناية بالبشرة", price: 350, stock: "available", image: "https://placehold.co/400x400/fce7eb/be123c?text=Vitamin+C", desc: "سيروم مغذي ومضاد للأكسدة يعيد حيوية البشرة ونضارتها الطبيعية." },
+            { id: "prod-4", name: "عطر رويال روز الفاخر للنساء", category: "عطور", price: 650, stock: "out", image: "https://placehold.co/400x400/fce7eb/be123c?text=Perfume", desc: "عطر ساحر يجمع بين عبير الورد الجوري والمسك الفاخر." }
         ];
 
-        // State variables loaded from localStorage or defaults
         let settings = JSON.parse(localStorage.getItem('cosmetics_settings')) || DEFAULT_SETTINGS;
-        // Backward compatibility if hero fields were missing
+        if (!settings.theme) settings.theme = "rose";
         if (!settings.heroTitle) settings.heroTitle = DEFAULT_SETTINGS.heroTitle;
         if (!settings.heroDesc) settings.heroDesc = DEFAULT_SETTINGS.heroDesc;
 
@@ -527,21 +473,35 @@
         let isAdminLoggedIn = false;
         let currentAdminTab = 'orders';
 
-        // Initialize App on Window Load
         window.onload = function() {
             syncSettingsToUI();
+            applyTheme(settings.theme);
             renderCategoriesFilter();
             renderProductsGrid();
             renderCartItems();
             updateCartBadge();
-            
-            // Check if admin was logged in session
-            if (sessionStorage.getItem('admin_logged') === 'true') {
-                isAdminLoggedIn = true;
-            }
+            if (sessionStorage.getItem('admin_logged') === 'true') isAdminLoggedIn = true;
         };
 
-        // Sync settings to UI titles and texts
+        function applyTheme(themeName) {
+            const heroBanner = document.getElementById('hero-banner');
+            const logoBox = document.getElementById('brand-logo-box');
+            
+            if (themeName === 'purple') {
+                heroBanner.className = "relative bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
+                logoBox.className = "w-12 h-12 bg-gradient-to-tr from-purple-600 to-indigo-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-purple-200";
+            } else if (themeName === 'emerald') {
+                heroBanner.className = "relative bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
+                logoBox.className = "w-12 h-12 bg-gradient-to-tr from-emerald-600 to-teal-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-emerald-200";
+            } else if (themeName === 'dark') {
+                heroBanner.className = "relative bg-gradient-to-r from-stone-800 via-stone-900 to-stone-800 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
+                logoBox.className = "w-12 h-12 bg-gradient-to-tr from-stone-800 to-stone-700 rounded-2xl flex items-center justify-center text-white shadow-md shadow-stone-400";
+            } else {
+                heroBanner.className = "relative bg-gradient-to-r from-rose-500 via-pink-500 to-rose-400 rounded-3xl p-8 sm:p-12 text-white shadow-xl overflow-hidden";
+                logoBox.className = "w-12 h-12 bg-gradient-to-tr from-rose-500 to-pink-400 rounded-2xl flex items-center justify-center text-white shadow-md shadow-rose-200";
+            }
+        }
+
         function syncSettingsToUI() {
             document.getElementById('brand-title').innerText = settings.shopName;
             document.getElementById('footer-brand').innerText = settings.shopName;
@@ -549,15 +509,14 @@
             document.getElementById('hero-main-title').innerText = settings.heroTitle;
             document.getElementById('hero-main-desc').innerText = settings.heroDesc;
 
-            // Admin settings inputs
             document.getElementById('setting-shop-name').value = settings.shopName;
+            document.getElementById('setting-theme').value = settings.theme || 'rose';
             document.getElementById('setting-hero-title').value = settings.heroTitle;
             document.getElementById('setting-hero-desc').value = settings.heroDesc;
             document.getElementById('setting-whatsapp').value = settings.whatsapp;
             document.getElementById('setting-instapay').value = settings.instapay || '';
         }
 
-        // Save data to localStorage helper
         function saveData() {
             localStorage.setItem('cosmetics_settings', JSON.stringify(settings));
             localStorage.setItem('cosmetics_categories', JSON.stringify(categories));
@@ -566,7 +525,6 @@
             localStorage.setItem('cosmetics_cart', JSON.stringify(cart));
         }
 
-        // Toast Notification System
         function showToast(title, message, isError = false) {
             const toast = document.getElementById('toast-notification');
             const toastTitle = document.getElementById('toast-title');
@@ -587,7 +545,6 @@
             }, 3500);
         }
 
-        // View Management (Store vs Admin)
         function switchView(viewName) {
             const storeView = document.getElementById('view-store');
             const adminView = document.getElementById('view-admin');
@@ -647,7 +604,6 @@
             showToast('تسجيل خروج', 'تم خروجك من لوحة التحكم بنجاح');
         }
 
-        // Customer Storefront Rendering
         function renderCategoriesFilter() {
             const container = document.getElementById('categories-filter-container');
             const prodCategorySelect = document.getElementById('prod-category');
@@ -660,7 +616,6 @@
             });
             container.innerHTML = html;
 
-            // Update product form select options
             if (prodCategorySelect) {
                 let optionsHtml = '';
                 categories.forEach(cat => {
@@ -735,7 +690,6 @@
             grid.innerHTML = html;
         }
 
-        // Cart Management
         function toggleCartModal(show) {
             const modal = document.getElementById('cart-modal');
             if (show) {
@@ -879,18 +833,13 @@
             updateCartBadge();
             toggleCartModal(false);
 
-            // Reset form
             document.getElementById('checkout-form').reset();
-
-            // Notify admin via WhatsApp or toast
             showToast('تم إرسال الطلب بنجاح!', 'تم تسجيل طلبك وسنتواصل معك قريباً.');
 
-            // Prompt WhatsApp message option
             const waText = encodeURIComponent(`مرحباً، أريد تأكيد طلبي الجديد رقم: ${newOrder.id}\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}\nالإجمالي: ${totalAmount} ج.م\nطريقة الدفع: ${paymentMethod}`);
             window.open(`https://wa.me/${settings.whatsapp}?text=${waText}`, '_blank');
         }
 
-        // Admin Dashboard & Management Logic
         function switchAdminTab(tabName) {
             currentAdminTab = tabName;
             const tabs = ['orders', 'products', 'categories', 'settings'];
@@ -911,7 +860,6 @@
         }
 
         function renderAdminDashboard() {
-            // Stats calculation
             const totalProductsCount = products.length;
             const outStockCount = products.filter(p => p.stock === 'out').length;
             const totalOrdersCount = orders.length;
@@ -979,7 +927,6 @@
             });
             tbody.innerHTML = html;
 
-            // Mark orders as read when viewing orders tab
             orders.forEach(o => o.unread = false);
             saveData();
         }
@@ -1048,7 +995,6 @@
             form.reset();
             document.getElementById('product-edit-id').value = '';
 
-            // Populate categories select
             const catSelect = document.getElementById('prod-category');
             let opts = '';
             categories.forEach(c => opts += `<option value="${c}">${c}</option>`);
@@ -1192,6 +1138,7 @@
         function handleSaveSettings(event) {
             event.preventDefault();
             settings.shopName = document.getElementById('setting-shop-name').value.trim();
+            settings.theme = document.getElementById('setting-theme').value;
             settings.heroTitle = document.getElementById('setting-hero-title').value.trim();
             settings.heroDesc = document.getElementById('setting-hero-desc').value.trim();
             settings.whatsapp = document.getElementById('setting-whatsapp').value.trim();
@@ -1203,8 +1150,9 @@
             }
 
             saveData();
+            applyTheme(settings.theme);
             syncSettingsToUI();
-            showToast('حفظ الإعدادات', 'تم تحديث إعدادات المتجر والواجهة بنجاح');
+            showToast('حفظ الإعدادات', 'تم تحديث إعدادات المتجر والمظهر بنجاح');
         }
     </script>
 </body>
