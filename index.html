@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة Supabase السحابية -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -112,7 +114,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
                 <div>
                     <h2 class="text-2xl font-black text-stone-900">لوحة تحكم الأدمن</h2>
-                    <p class="text-sm text-stone-500">إدارة المنتجات، متابعة الطلبات، وتعديل إعدادات المتجر.</p>
+                    <p class="text-sm text-stone-500">إدارة المنتجات، متابعة الطلبات، وتعديل إعدادات المتجر (سحابي متزامن).</p>
                 </div>
                 <div class="flex items-center space-x-3 space-x-reverse">
                     <button onclick="switchView('store')" class="bg-stone-100 hover:bg-stone-200 text-stone-700 px-4 py-2 rounded-xl text-sm font-bold transition-all">
@@ -272,7 +274,7 @@
                             <label class="block text-xs font-bold text-stone-500 mb-1">كلمة مرور لوحة التحكم الجديدة</label>
                             <input type="password" id="setting-password" placeholder="اتركه فارغاً إن لم ترد التغيير" class="w-full px-4 py-2.5 bg-stone-100 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white">
                         </div>
-                        <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all shadow-sm">حفظ الإعدادات والتعديلات</button>
+                        <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all shadow-sm">حفظ الإعدادات ونشرها للجميع</button>
                     </form>
                 </div>
             </div>
@@ -406,8 +408,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-stone-500 mb-1">صورة المنتج (رفع من الجهاز)</label>
-                    <input type="file" id="prod-image-file" accept="image/*" class="w-full px-4 py-2 bg-stone-100 border border-stone-200 rounded-xl text-sm">
+                    <label class="block text-xs font-bold text-stone-500 mb-1">رابط صورة المنتج (URL)</label>
+                    <input type="text" id="prod-image-url" placeholder="https://..." class="w-full px-4 py-2.5 bg-stone-100 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-stone-500 mb-1">وصف المنتج</label>
@@ -444,6 +446,11 @@
     </footer>
 
     <script>
+        // إعدادات اتصال Supabase الخاصة بك
+        const SUPABASE_URL = 'https://bzvdioifiyrfpuoefcbu.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable__X3RF9qMbYY3nBrVqGgEJA_2wcxuHo6';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         const DEFAULT_SETTINGS = {
             shopName: "متجر الجمال والعناية",
             theme: "rose",
@@ -460,14 +467,10 @@
             { id: "prod-2", name: "ماسكارا تكثيف وتطويل الرموش السوداء", category: "مكياج عيون", price: 220, stock: "available", image: "https://placehold.co/400x400/fce7eb/be123c?text=Mascara", desc: "ماسكارا احترافية تمنح رموشك كثافة مضاعفة ومظهر جذاب طوال اليوم." }
         ];
 
-        let settings = JSON.parse(localStorage.getItem('cosmetics_settings')) || DEFAULT_SETTINGS;
-        if (!settings.theme) settings.theme = "rose";
-        if (!settings.heroTitle) settings.heroTitle = DEFAULT_SETTINGS.heroTitle;
-        if (!settings.heroDesc) settings.heroDesc = DEFAULT_SETTINGS.heroDesc;
-
-        let categories = JSON.parse(localStorage.getItem('cosmetics_categories')) || INITIAL_CATEGORIES;
-        let products = JSON.parse(localStorage.getItem('cosmetics_products')) || INITIAL_PRODUCTS;
-        let orders = JSON.parse(localStorage.getItem('cosmetics_orders')) || [];
+        let settings = { ...DEFAULT_SETTINGS };
+        let categories = [...INITIAL_CATEGORIES];
+        let products = [...INITIAL_PRODUCTS];
+        let orders = [];
         let cart = JSON.parse(localStorage.getItem('cosmetics_cart')) || [];
 
         let currentCategoryFilter = 'all';
@@ -475,15 +478,59 @@
         let isAdminLoggedIn = false;
         let currentAdminTab = 'orders';
 
-        window.onload = function() {
+        window.onload = async function() {
+            await fetchCloudData();
             syncSettingsToUI();
-            applyTheme(settings.theme);
+            applyTheme(settings.theme || 'rose');
             renderCategoriesFilter();
             renderProductsGrid();
             renderCartItems();
             updateCartBadge();
             if (sessionStorage.getItem('admin_logged') === 'true') isAdminLoggedIn = true;
         };
+
+        async function fetchCloudData() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('site_state')
+                    .select('content')
+                    .eq('id', 1)
+                    .single();
+
+                if (data && data.content) {
+                    const cloudData = data.content;
+                    settings = cloudData.settings || DEFAULT_SETTINGS;
+                    categories = cloudData.categories || INITIAL_CATEGORIES;
+                    products = cloudData.products || INITIAL_PRODUCTS;
+                    orders = cloudData.orders || [];
+                }
+            } catch (err) {
+                console.log("جارِ استخدام القيم الافتراضية أو حدث خطأ في الاتصال بالسحابة");
+            }
+        }
+
+        async function saveData() {
+            const cloudPayload = {
+                settings,
+                categories,
+                products,
+                orders
+            };
+
+            try {
+                const { error } = await supabaseClient
+                    .from('site_state')
+                    .upsert({ id: 1, content: cloudPayload });
+
+                if (error) {
+                    showToast('خطأ في الحفظ السحابي', error.message, true);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+
+            localStorage.setItem('cosmetics_cart', JSON.stringify(cart));
+        }
 
         function applyTheme(themeName) {
             const heroBanner = document.getElementById('hero-banner');
@@ -558,14 +605,6 @@
             document.getElementById('setting-hero-desc').value = settings.heroDesc;
             document.getElementById('setting-whatsapp').value = settings.whatsapp;
             document.getElementById('setting-instapay').value = settings.instapay || '';
-        }
-
-        function saveData() {
-            localStorage.setItem('cosmetics_settings', JSON.stringify(settings));
-            localStorage.setItem('cosmetics_categories', JSON.stringify(categories));
-            localStorage.setItem('cosmetics_products', JSON.stringify(products));
-            localStorage.setItem('cosmetics_orders', JSON.stringify(orders));
-            localStorage.setItem('cosmetics_cart', JSON.stringify(cart));
         }
 
         function showToast(title, message, isError = false) {
@@ -675,7 +714,7 @@
                 html += `
                     <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden flex flex-col group">
                         <div class="relative bg-stone-100 aspect-square overflow-hidden">
-                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/fce7eb/be123c?text=Item'">
+                            <img src="${p.image || 'https://placehold.co/400x400/fce7eb/be123c?text=Item'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/fce7eb/be123c?text=Item'">
                             <span class="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full shadow-sm ${isOut ? 'bg-stone-800 text-white' : 'bg-white/90 backdrop-blur-sm ' + textClass}">
                                 ${isOut ? 'نفذت الكمية' : p.category}
                             </span>
@@ -707,7 +746,7 @@
             const existing = cart.find(item => item.id === productId);
             if (existing) existing.quantity += 1;
             else cart.push({ ...product, quantity: 1 });
-            saveData();
+            localStorage.setItem('cosmetics_cart', JSON.stringify(cart));
             updateCartBadge();
             showToast('تمت الإضافة', 'تمت إضافة المنتج للسلة بنجاح');
         }
@@ -717,7 +756,7 @@
             if (!item) return;
             item.quantity += delta;
             if (item.quantity <= 0) cart = cart.filter(i => i.id !== productId);
-            saveData();
+            localStorage.setItem('cosmetics_cart', JSON.stringify(cart));
             updateCartBadge();
             renderCartItems();
         }
@@ -745,7 +784,7 @@
                 html += `
                     <div class="flex items-center justify-between py-3">
                         <div class="flex items-center space-x-3 space-x-reverse">
-                            <img src="${item.image}" class="w-14 h-14 object-cover rounded-xl border">
+                            <img src="${item.image || 'https://placehold.co/100x100'}" class="w-14 h-14 object-cover rounded-xl border">
                             <div>
                                 <h5 class="text-xs font-bold text-stone-800">${item.name}</h5>
                                 <p class="text-xs ${textClass} font-bold">${item.price} ج.م</p>
@@ -769,7 +808,7 @@
             else box.classList.add('hidden');
         }
 
-        function submitOrder(event) {
+        async function submitOrder(event) {
             event.preventDefault();
             if (cart.length === 0) return;
             const name = document.getElementById('customer-name').value;
@@ -793,7 +832,8 @@
             };
             orders.unshift(newOrder);
             
-            // Build WhatsApp Message
+            await saveData();
+
             let itemsSummary = cart.map(i => `- ${i.name} (الكمية: ${i.quantity})`).join('\n');
             let waMessage = `🛍️ *طلب جديد عبر المتجر*\n\n` +
                             `📌 *رقم الطلب:* ${orderId}\n` +
@@ -806,7 +846,7 @@
                             `💰 *الإجمالي الكلي:* ${total} ج.م`;
 
             cart = [];
-            saveData();
+            localStorage.removeItem('cosmetics_cart');
             updateCartBadge();
             toggleCartModal(false);
             showToast('تم الطلب بنجاح', 'جارٍ تحويلك لواتساب لإرسال الطلب...');
@@ -850,11 +890,25 @@
                         <td class="p-4 text-xs">${o.deliveryMethod}<br>${o.paymentMethod}</td>
                         <td class="p-4 text-xs font-black">${o.total} ج.م</td>
                         <td class="p-4 text-xs">${o.status}</td>
-                        <td class="p-4 text-xs"><button onclick="orders = orders.filter(x => x.id != '${o.id}'); saveData(); renderAdminDashboard();" class="text-red-500 font-bold">حذف</button></td>
+                        <td class="p-4 text-xs"><button onclick="deleteOrder('${o.id}')" class="text-red-500 font-bold">حذف</button></td>
                     </tr>
                 `;
             });
             tbody.innerHTML = html;
+        }
+
+        async function deleteOrder(id) {
+            orders = orders.filter(x => x.id !== id);
+            await saveData();
+            renderAdminDashboard();
+        }
+
+        async function clearAllOrders() {
+            if (confirm('هل أنت متأكد من مسح جميع الطلبات؟')) {
+                orders = [];
+                await saveData();
+                renderAdminDashboard();
+            }
         }
 
         function renderAdminProducts() {
@@ -864,11 +918,18 @@
                 html += `
                     <div class="bg-white p-4 rounded-2xl shadow-sm border flex items-center justify-between">
                         <span class="font-bold text-sm">${p.name}</span>
-                        <button onclick="products = products.filter(x => x.id != '${p.id}'); saveData(); renderAdminProducts(); renderProductsGrid();" class="text-red-500 text-xs font-bold">حذف</button>
+                        <button onclick="deleteProduct('${p.id}')" class="text-red-500 text-xs font-bold">حذف</button>
                     </div>
                 `;
             });
             grid.innerHTML = html;
+        }
+
+        async function deleteProduct(id) {
+            products = products.filter(x => x.id !== id);
+            await saveData();
+            renderAdminProducts();
+            renderProductsGrid();
         }
 
         function renderAdminCategories() {
@@ -881,31 +942,45 @@
         function openProductModal() { document.getElementById('product-modal').classList.remove('hidden'); }
         function closeProductModal() { document.getElementById('product-modal').classList.add('hidden'); }
 
-        function handleSaveProduct(event) {
+        async function handleSaveProduct(event) {
             event.preventDefault();
             const name = document.getElementById('prod-name').value;
             const price = parseFloat(document.getElementById('prod-price').value);
+            const stock = document.getElementById('prod-stock').value;
+            const imageUrl = document.getElementById('prod-image-url').value.trim();
             const desc = document.getElementById('prod-desc').value;
-            products.push({ id: 'prod-' + Date.now(), name, category: categories[0], price, stock: 'available', image: 'https://placehold.co/400x400/fce7eb/be123c?text=New', desc });
-            saveData();
+
+            products.push({ 
+                id: 'prod-' + Date.now(), 
+                name, 
+                category: categories[0], 
+                price, 
+                stock, 
+                image: imageUrl || 'https://placehold.co/400x400/fce7eb/be123c?text=Item', 
+                desc 
+            });
+
+            await saveData();
             closeProductModal();
             renderProductsGrid();
-            showToast('تم الحفظ', 'تمت إضافة المنتج بنجاح');
+            renderAdminProducts();
+            showToast('تم الحفظ', 'تمت إضافة المنتج سحابياً بنجاح');
         }
 
-        function handleAddCategory(event) {
+        async function handleAddCategory(event) {
             event.preventDefault();
             const name = document.getElementById('new-category-name').value.trim();
             if (name && !categories.includes(name)) {
                 categories.push(name);
-                saveData();
+                await saveData();
                 renderCategoriesFilter();
+                renderAdminCategories();
                 document.getElementById('new-category-name').value = '';
-                showToast('تم', 'تمت إضافة الفئة');
+                showToast('تم', 'تمت إضافة الفئة ونشرها');
             }
         }
 
-        function handleSaveSettings(event) {
+        async function handleSaveSettings(event) {
             event.preventDefault();
             settings.shopName = document.getElementById('setting-shop-name').value.trim();
             settings.theme = document.getElementById('setting-theme').value;
@@ -917,10 +992,10 @@
             const newPass = document.getElementById('setting-password').value.trim();
             if (newPass) settings.adminPassword = newPass;
 
-            saveData();
+            await saveData();
             applyTheme(settings.theme);
             syncSettingsToUI();
-            showToast('تم الحفظ', 'تم تحديث الإعدادات بنجاح');
+            showToast('تم الحفظ ونشر التعديلات', 'التعديلات ظهرت الآن لدى جميع المستخدمين');
         }
     </script>
 </body>
